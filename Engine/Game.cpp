@@ -20,7 +20,6 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
-#include "SpriteCodex.h"
 #include "SpriteEffect.h"
 
 Game::Game( MainWindow& wnd )
@@ -42,7 +41,15 @@ Game::Game( MainWindow& wnd )
 	{
 		brd.SpawnContents(rng, snek, Board::CellContents::Food);
 	}
-	sndTitle.Play(1.0f, 1.0f);
+	if (!gameIsStarted)
+	{
+		sndTitle.Play(1.0f, 1.0f);
+	}
+	if (gameIsOver)
+	{
+		sndTitle.Play(1.0f, 1.0f);
+	}
+	
 }
 
 void Game::Go()
@@ -114,6 +121,7 @@ void Game::UpdateModel()
 					gameIsOver = true;
 					sndFart.Play(rng, 1.2f);
 					sndMusic.StopAll();
+					sndTitle.Play(1.0f, 1.0f);
 				}
 				else if (contents == Board::CellContents::Food)
 				{
@@ -142,8 +150,26 @@ void Game::UpdateModel()
 	{
 		if (wnd.kbd.KeyIsPressed(VK_RETURN))
 		{
+			sndTitle.StopAll();
 			sndMusic.Play(1.0f, 0.6f);
 			gameIsStarted = true;
+		}
+	}
+	if (gameIsOver)
+	{
+		sndMusic.StopAll();
+		if (wnd.kbd.KeyIsPressed(VK_SPACE))
+		{
+			gameIsOver = false;
+			gameIsStarted = false;
+			rng = std::mt19937(std::random_device()());
+			snek = Snake({ 2,2 });
+			delta_loc = Location{ 1,0 };
+			nPoison = settings.GetPoisonAmount();
+			nFood = settings.GetFoodAmount();
+			snekSpeedupFactor = settings.GetSpeedupRate();
+			snekMovePeriod = 0.4f;
+			snekMoveCounter = 0.0f;
 		}
 	}
 }
@@ -153,17 +179,15 @@ void Game::ComposeFrame()
 	if (gameIsStarted)
 	{
 		snek.Draw(brd);
-		brd.DrawCells();
+		brd.DrawCells(apple);
+		brd.DrawBorder();
 		if (gameIsOver)
 		{
-			SpriteCodex::DrawGameOver(350, 265, gfx);
+			gfx.DrawSprite(0, 0, over);
 		}
-		brd.DrawBorder();
 	}
 	else
 	{
-		SpriteCodex::DrawTitle(290, 225, gfx);
-		gfx.DrawSprite(0, 0, surf);
-		gfx.DrawSprite(0, 0, snakeSur, SpriteEffect::AlphaBlend{});
+		gfx.DrawSprite(0, 0, title);
 	}
 }

@@ -47,8 +47,9 @@ private:
 private:
 	MainWindow& wnd;
 	Graphics gfx;
-	Surface surf = L"snakeslot.png";
-	Surface snakeSur = L"snake.png";
+	Surface title = L"snakemaintitle.png";
+	Surface over = L"snakegameover.png";
+	Surface apple = L"apple01.png";
 	/********************************/
 	/*  User Variables              */
 	GameSettings settings = "settings.txt";

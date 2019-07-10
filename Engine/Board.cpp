@@ -1,6 +1,7 @@
 #include "Board.h"
 #include "Snake.h"
 #include <assert.h>
+#include "SpriteEffect.h"
 
 Board::Board(const GameSettings& settings, Graphics& gfx)
 	:
@@ -22,7 +23,24 @@ void Board::DrawCell(const Location & loc, Color c)
 	const int off_x = x + borderWidth + borderPadding;
 	const int off_y = y + borderWidth + borderPadding;
 
-	gfx.DrawRectDim(loc.x * dimension + off_x + cellPadding, loc.y * dimension + off_y + cellPadding, dimension - cellPadding * 2, dimension - cellPadding * 2, c);
+	gfx.DrawRectDim(loc.x * dimension + off_x + cellPadding, loc.y * dimension + off_y + cellPadding, 
+		dimension - cellPadding * 2, dimension - cellPadding * 2, c);
+}
+
+void Board::DrawCell(const Location & loc, const Surface & surf)
+{
+	assert(loc.x >= 0);
+	assert(loc.x < width);
+	assert(loc.y >= 0);
+	assert(loc.y < height);
+
+	const int off_x = x + borderWidth + borderPadding;
+	const int off_y = y + borderWidth + borderPadding;
+
+	//gfx.DrawRectDim(loc.x * dimension + off_x + cellPadding, loc.y * dimension + off_y + cellPadding,
+		//dimension - cellPadding * 2, dimension - cellPadding * 2, surf);
+	gfx.DrawRectDim(loc.x * dimension + off_x + cellPadding, loc.y * dimension + off_y + cellPadding,
+		dimension - cellPadding * 2, dimension - cellPadding * 2, surf);
 }
 
 int Board::GetGridWidth() const
@@ -85,7 +103,7 @@ void Board::DrawBorder()
 	gfx.DrawRect(left, bottom - borderWidth, right, bottom, borderColor);
 }
 
-void Board::DrawCells()
+void Board::DrawCells(const Surface& surf)
 {
 	for (int y = 0; y < height; y++)
 	{
@@ -94,13 +112,13 @@ void Board::DrawCells()
 			switch (GetContents({ x,y }))
 			{
 			case Board::CellContents::Obstacle:
-				DrawCell({ x,y }, obstacleColor);
+				DrawCell({ x,y }, obstacleImage);
 				break;
 			case Board::CellContents::Food:
-				DrawCell({ x,y }, foodColor);
+				DrawCell({ x,y }, surf); //foodColor to replace for pixel
 				break;
 			case Board::CellContents::Poison:
-				DrawCell({ x,y }, poisonColor);
+				DrawCell({ x,y }, poisonImage);
 				break;
 			}
 		}

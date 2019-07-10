@@ -363,6 +363,23 @@ void Graphics::DrawRect(int x0, int y0, int x1, int y1, Color c)
 	}
 }
 
+void Graphics::DrawRectSprite(int x0, int y0, int x1, int y1, const Surface & s)
+{
+	if (x0 > x1)
+	{
+		std::swap(x0, x1);
+	}
+	if (y0 > y1)
+	{
+		std::swap(y0, y1);
+	}
+
+	if (y0 < y1 && x0 < x1)
+	{
+		DrawSprite(x0, y0, s);
+	}
+}
+
 
 //////////////////////////////////////////////////
 //           Graphics Exception

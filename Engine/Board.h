@@ -18,7 +18,8 @@ public:
 	};
 public:
 	Board(const GameSettings& settings, Graphics& gfx);
-	void DrawCell(const Location& loc, Color c);
+	void DrawCell(const Location & loc, Color c);
+	void DrawCell(const Location & loc, const Surface& surf);
 	int GetGridWidth() const;
 	int GetGridHeight() const;
 	bool IsInsideBoard(const Location& loc) const;
@@ -26,12 +27,14 @@ public:
 	void ConsumeContents(const Location& loc);
 	void SpawnContents(std::mt19937& rng, const class Snake& snake, CellContents contents);
 	void DrawBorder();
-	void DrawCells();
+	void DrawCells(const Surface& surf);
 private:
 	static constexpr Color borderColor = Colors::Blue;
-	static constexpr Color obstacleColor = Colors::Gray;
-	static constexpr Color poisonColor = { 100,8,64 };
-	static constexpr Color foodColor = Colors::Red;
+	//static constexpr Color obstacleColor = Colors::Gray;
+	Surface obstacleImage = L"obstacle.png";
+	Surface poisonImage = L"poison.png";
+	//static constexpr Color poisonColor = { 100,8,64 };
+	//static constexpr Color foodColor = Colors::Red;
 	int dimension;
 	static constexpr int cellPadding = 1;
 	int width;

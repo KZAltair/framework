@@ -1,11 +1,11 @@
 [Tile Size]
-20
+30
 
 [Board Dimensions]
-35 25
+20 15
 
 [Poison Amount]
-100
+50
 
 [Food Amount]
 6

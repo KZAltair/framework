@@ -61,9 +61,14 @@ public:
 	}
 	void PutPixel( int x,int y,Color c );
 	void DrawRect(int x0, int y0, int x1, int y1, Color c);
+	void DrawRectSprite(int x0, int y0, int x1, int y1, const Surface& s);
 	void DrawRectDim(int x0, int y0, int width, int height, Color c)
 	{
 		DrawRect(x0, y0, x0 + width, y0 + height, c);
+	}
+	void DrawRectDim(int x0, int y0, int width, int height, const Surface& s)
+	{
+		DrawRectSprite(x0, y0, x0 + width, y0 + height, s);
 	}
 	void DrawSprite(int x, int y, const Surface& s);
 	template<typename E>
