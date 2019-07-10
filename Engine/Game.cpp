@@ -178,6 +178,7 @@ void Game::ComposeFrame()
 {
 	if (gameIsStarted)
 	{
+		gfx.DrawSprite(0, 0, background);
 		snek.Draw(brd);
 		brd.DrawCells(apple);
 		brd.DrawBorder();

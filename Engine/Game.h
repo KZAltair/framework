@@ -50,6 +50,7 @@ private:
 	Surface title = L"snakemaintitle.png";
 	Surface over = L"snakegameover.png";
 	Surface apple = L"apple01.png";
+	Surface background = L"back01.png";
 	/********************************/
 	/*  User Variables              */
 	GameSettings settings = "settings.txt";

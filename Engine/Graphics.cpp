@@ -22,6 +22,7 @@
 #include "Graphics.h"
 #include "DXErr.h"
 #include "ChiliException.h"
+#include "SpriteEffect.h"
 #include <assert.h>
 #include <string>
 #include <array>
@@ -376,7 +377,7 @@ void Graphics::DrawRectSprite(int x0, int y0, int x1, int y1, const Surface & s)
 
 	if (y0 < y1 && x0 < x1)
 	{
-		DrawSprite(x0, y0, s);
+		DrawSprite(x0, y0, s, SpriteEffect::AlphaBlend{});
 	}
 }
 

@@ -29,7 +29,7 @@ public:
 	void DrawBorder();
 	void DrawCells(const Surface& surf);
 private:
-	static constexpr Color borderColor = Colors::Blue;
+	static constexpr Color borderColor = { 100,255,100 };
 	//static constexpr Color obstacleColor = Colors::Gray;
 	Surface obstacleImage = L"obstacle.png";
 	Surface poisonImage = L"poison.png";
@@ -41,8 +41,8 @@ private:
 	int height;
 	static constexpr int borderWidth = 4;
 	static constexpr int borderPadding = 2;
-	static constexpr int x = 70;
-	static constexpr int y = 50;
+	static constexpr int x = 100;
+	static constexpr int y = 80;
 	std::vector<CellContents> contents;
 	Graphics& gfx;
 };
