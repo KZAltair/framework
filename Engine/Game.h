@@ -23,6 +23,13 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Graphics.h"
+#include "Board.h"
+#include "Snake.h"
+#include "Sound.h"
+#include "FrameTimer.h"
+#include "SoundEffect.h"
+#include "Surface.h"
+#include <random>
 
 class Game
 {
@@ -40,7 +47,31 @@ private:
 private:
 	MainWindow& wnd;
 	Graphics gfx;
+	Surface surf = L"snakeslot.png";
+	Surface snakeSur = L"snake.png";
 	/********************************/
 	/*  User Variables              */
+	GameSettings settings = "settings.txt";
+	Board brd;
+	Snake snek;
+	Location delta_loc = { 1,0 };
+	std::mt19937 rng; //Critical to initialize rng before goal
+	FrameTimer ft;
+	static constexpr float snekMovePeriodMin = 0.040f;
+	static constexpr float snekMovePeriodSpeedup = 0.15f;
+	int nPoison;
+	int nFood;
+	float snekMovePeriod = 0.4f;
+	float snekMoveCounter = 0.0f;
+	float snekSpeedupFactor;
+	int eatingCounter = 0;
+	bool gameIsOver = false;
+	bool gameIsStarted = false;
+
+	SoundEffect sfxEat = SoundEffect({ L"eating.wav" });
+	SoundEffect sfxSlither = SoundEffect({ L"punch.wav" });
+	Sound sndMusic = Sound(L"gameplay.wav", Sound::LoopType::AutoFullSound);
+	Sound sndTitle = Sound(L"mainmenu.wav");
+	SoundEffect sndFart = SoundEffect({ L"punch.wav" });
 	/********************************/
 };

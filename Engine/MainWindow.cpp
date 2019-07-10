@@ -34,8 +34,8 @@ MainWindow::MainWindow( HINSTANCE hInst,wchar_t * pArgs )
 	WNDCLASSEX wc = { sizeof( WNDCLASSEX ),CS_CLASSDC,_HandleMsgSetup,0,0,
 		hInst,nullptr,nullptr,nullptr,nullptr,
 		wndClassName,nullptr };
-	wc.hIconSm = (HICON)LoadImage( hInst,MAKEINTRESOURCE( IDI_APPICON ),IMAGE_ICON,16,16,0 );
-	wc.hIcon = (HICON)LoadImage( hInst,MAKEINTRESOURCE( IDI_APPICON ),IMAGE_ICON,32,32,0 );
+	wc.hIconSm = (HICON)LoadImage( hInst,MAKEINTRESOURCE(IDI_ICON1),IMAGE_ICON,16,16,0 );
+	wc.hIcon = (HICON)LoadImage( hInst,MAKEINTRESOURCE(IDI_ICON1),IMAGE_ICON,32,32,0 );
 	wc.hCursor = LoadCursor( nullptr,IDC_ARROW );
 	RegisterClassEx( &wc );
 
@@ -46,7 +46,7 @@ MainWindow::MainWindow( HINSTANCE hInst,wchar_t * pArgs )
 	wr.top = 100;
 	wr.bottom = Graphics::ScreenHeight + wr.top;
 	AdjustWindowRect( &wr,WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,FALSE );
-	hWnd = CreateWindow( wndClassName,L"Chili DirectX Framework",
+	hWnd = CreateWindow( wndClassName,L"Snek Game v0.1",
 		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
 		wr.left,wr.top,wr.right - wr.left,wr.bottom - wr.top,
 		nullptr,nullptr,hInst,this );

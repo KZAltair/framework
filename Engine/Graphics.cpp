@@ -240,6 +240,24 @@ Graphics::Graphics( HWNDKey& key )
 		_aligned_malloc( sizeof( Color ) * Graphics::ScreenWidth * Graphics::ScreenHeight,16u ) );
 }
 
+void Graphics::DrawSprite(int x, int y, const Surface & s)
+{
+	const int width = s.GetWidth();
+	const int height = s.GetHeight();
+	for (int sx = 0; sx < width; sx++)
+	{
+		for (int sy = 0; sy < height; sy++)
+		{
+			PutPixel(x + sx, y + sy, s.GetPixel(sx, sy));
+		}
+	}
+}
+
+RectI Graphics::GetScreenRect()
+{
+	return{ 0,ScreenWidth,0,ScreenHeight };
+}
+
 Graphics::~Graphics()
 {
 	// free sysbuffer memory (aligned free)
@@ -250,6 +268,15 @@ Graphics::~Graphics()
 	}
 	// clear the state of the device context before destruction
 	if( pImmediateContext ) pImmediateContext->ClearState();
+}
+
+Color Graphics::GetPixel(int x, int y) const
+{
+	assert(x >= 0);
+	assert(x < int(Graphics::ScreenWidth));
+	assert(y >= 0);
+	assert(y < int(Graphics::ScreenHeight));
+	return pSysBuffer[Graphics::ScreenWidth * y + x];
 }
 
 void Graphics::EndFrame()
@@ -314,6 +341,26 @@ void Graphics::PutPixel( int x,int y,Color c )
 	assert( y >= 0 );
 	assert( y < int( Graphics::ScreenHeight ) );
 	pSysBuffer[Graphics::ScreenWidth * y + x] = c;
+}
+
+void Graphics::DrawRect(int x0, int y0, int x1, int y1, Color c)
+{
+	if (x0 > x1)
+	{
+		std::swap(x0, x1);
+	}
+	if (y0 > y1)
+	{
+		std::swap(y0, y1);
+	}
+
+	for (int y = y0; y < y1; ++y)
+	{
+		for (int x = x0; x < x1; ++x)
+		{
+			PutPixel(x, y, c);
+		}
+	}
 }
 
 

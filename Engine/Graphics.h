@@ -24,6 +24,8 @@
 #include <wrl.h>
 #include "ChiliException.h"
 #include "Colors.h"
+#include "Surface.h"
+#include <cassert>
 
 class Graphics
 {
@@ -50,6 +52,7 @@ public:
 	Graphics( class HWNDKey& key );
 	Graphics( const Graphics& ) = delete;
 	Graphics& operator=( const Graphics& ) = delete;
+	Color GetPixel(int x, int y) const;
 	void EndFrame();
 	void BeginFrame();
 	void PutPixel( int x,int y,int r,int g,int b )
@@ -57,6 +60,102 @@ public:
 		PutPixel( x,y,{ unsigned char( r ),unsigned char( g ),unsigned char( b ) } );
 	}
 	void PutPixel( int x,int y,Color c );
+	void DrawRect(int x0, int y0, int x1, int y1, Color c);
+	void DrawRectDim(int x0, int y0, int width, int height, Color c)
+	{
+		DrawRect(x0, y0, x0 + width, y0 + height, c);
+	}
+	void DrawSprite(int x, int y, const Surface& s);
+	template<typename E>
+	void DrawSprite(int x, int y, const Surface& s, E effect, bool reversed = false)
+	{
+		DrawSprite(x, y, s.GetRect(), s, effect, reversed);
+	}
+	template<typename E>
+	void DrawSprite(int x, int y, const RectI& srcRect, const Surface& s, E effect, bool reversed = false)
+	{
+		DrawSprite(x, y, srcRect, GetScreenRect(), s, effect, reversed);
+	}
+	template<typename E>
+	void DrawSprite(int x, int y, RectI srcRect, const RectI& clip, const Surface& s, E effect, bool reversed = false)
+	{
+		assert(srcRect.left >= 0);
+		assert(srcRect.right <= s.GetWidth());
+		assert(srcRect.top >= 0);
+		assert(srcRect.bottom <= s.GetHeight());
+
+		// mirror in x depending on reversed bool switch
+		if (!reversed)
+		{
+			// cliping is different depending on mirroring status
+			if (x < clip.left)
+			{
+				srcRect.left += clip.left - x;
+				x = clip.left;
+			}
+			if (y < clip.top)
+			{
+				srcRect.top += clip.top - y;
+				y = clip.top;
+			}
+			if (x + srcRect.GetWidth() > clip.right)
+			{
+				srcRect.right -= x + srcRect.GetWidth() - clip.right;
+			}
+			if (y + srcRect.GetHeight() > clip.bottom)
+			{
+				srcRect.bottom -= y + srcRect.GetHeight() - clip.bottom;
+			}
+			for (int sy = srcRect.top; sy < srcRect.bottom; sy++)
+			{
+				for (int sx = srcRect.left; sx < srcRect.right; sx++)
+				{
+					effect(
+						// no mirroring
+						s.GetPixel(sx, sy),
+						x + sx - srcRect.left,
+						y + sy - srcRect.top,
+						*this
+					);
+				}
+			}
+		}
+		else
+		{
+			if (x < clip.left)
+			{
+				srcRect.right -= clip.left - x;
+				x = clip.left;
+			}
+			if (y < clip.top)
+			{
+				srcRect.top += clip.top - y;
+				y = clip.top;
+			}
+			if (x + srcRect.GetWidth() > clip.right)
+			{
+				srcRect.left += x + srcRect.GetWidth() - clip.right;
+			}
+			if (y + srcRect.GetHeight() > clip.bottom)
+			{
+				srcRect.bottom -= y + srcRect.GetHeight() - clip.bottom;
+			}
+			const int xOffset = srcRect.left + srcRect.right - 1;
+			for (int sy = srcRect.top; sy < srcRect.bottom; sy++)
+			{
+				for (int sx = srcRect.left; sx < srcRect.right; sx++)
+				{
+					effect(
+						// mirror in x
+						s.GetPixel(xOffset - sx, sy),
+						x + sx - srcRect.left,
+						y + sy - srcRect.top,
+						*this
+					);
+				}
+			}
+		}
+	}
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;
@@ -75,4 +174,5 @@ private:
 public:
 	static constexpr int ScreenWidth = 800;
 	static constexpr int ScreenHeight = 600;
+	static RectI GetScreenRect();
 };
