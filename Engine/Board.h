@@ -28,6 +28,7 @@ public:
 	void SpawnContents(std::mt19937& rng, const class Snake& snake, CellContents contents);
 	void DrawBorder();
 	void DrawCells(const Surface& surf);
+	void ClearBoard(const GameSettings& settings, std::mt19937& rng, const class Snake& snake);
 private:
 	static constexpr Color borderColor = { 100,255,100 };
 	//static constexpr Color obstacleColor = Colors::Gray;

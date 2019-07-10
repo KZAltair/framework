@@ -31,7 +31,8 @@ Game::Game( MainWindow& wnd )
 	snek({ 2,2 }),
 	nPoison(settings.GetPoisonAmount()),
 	nFood(settings.GetFoodAmount()),
-	snekSpeedupFactor(settings.GetSpeedupRate())
+	snekSpeedupFactor(settings.GetSpeedupRate()),
+	font(L"Customfont16x28.bmp")
 {
 	for (int i = 0; i < nPoison; i++)
 	{
@@ -130,6 +131,7 @@ void Game::UpdateModel()
 					brd.SpawnContents(rng, snek, Board::CellContents::Obstacle);
 					brd.SpawnContents(rng, snek, Board::CellContents::Food);
 					sfxEat.Play(rng, 0.8f);
+					++points;
 				}
 				else if (contents == Board::CellContents::Poison)
 				{
@@ -163,13 +165,13 @@ void Game::UpdateModel()
 			gameIsOver = false;
 			gameIsStarted = false;
 			rng = std::mt19937(std::random_device()());
+			brd.ClearBoard(settings, rng, snek);
 			snek = Snake({ 2,2 });
 			delta_loc = Location{ 1,0 };
-			nPoison = settings.GetPoisonAmount();
-			nFood = settings.GetFoodAmount();
 			snekSpeedupFactor = settings.GetSpeedupRate();
 			snekMovePeriod = 0.4f;
 			snekMoveCounter = 0.0f;
+			points = 0;
 		}
 	}
 }
@@ -182,6 +184,7 @@ void Game::ComposeFrame()
 		snek.Draw(brd);
 		brd.DrawCells(apple);
 		brd.DrawBorder();
+		font.DrawText(std::to_string(points), { 700, 30 }, Colors::White, gfx);
 		if (gameIsOver)
 		{
 			gfx.DrawSprite(0, 0, over);

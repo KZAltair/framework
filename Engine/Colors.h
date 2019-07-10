@@ -46,10 +46,18 @@ public:
 		:
 		Color( (x << 24u) | col.dword )
 	{}
-	Color& operator =( Color color )
+	Color& operator =(Color color)
 	{
 		dword = color.dword;
 		return *this;
+	}
+	bool operator==(const Color& rhs) const
+	{
+		return dword == rhs.dword;
+	}
+	bool operator!=(const Color& rhs) const
+	{
+		return !(*this == rhs);
 	}
 	constexpr unsigned char GetX() const
 	{

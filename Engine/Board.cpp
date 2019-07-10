@@ -13,6 +13,18 @@ Board::Board(const GameSettings& settings, Graphics& gfx)
 {
 }
 
+void Board::ClearBoard(const GameSettings& settings, std::mt19937& rng, const class Snake& snake)
+{
+	contents = std::vector<CellContents>(width * height, CellContents::Empty);
+	for (int i = 0; i <= settings.GetFoodAmount(); ++i)
+	{
+		SpawnContents(rng, snake, Board::CellContents::Food);
+	}
+	for (int i = 0; i <= settings.GetPoisonAmount(); ++i)
+	{
+		SpawnContents(rng, snake, Board::CellContents::Poison);
+	}
+}
 void Board::DrawCell(const Location & loc, Color c)
 {
 	assert(loc.x >= 0);

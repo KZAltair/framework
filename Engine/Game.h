@@ -29,6 +29,7 @@
 #include "FrameTimer.h"
 #include "SoundEffect.h"
 #include "Surface.h"
+#include "Font.h"
 #include <random>
 
 class Game
@@ -51,6 +52,7 @@ private:
 	Surface over = L"snakegameover.png";
 	Surface apple = L"apple01.png";
 	Surface background = L"back01.png";
+	Font font;
 	/********************************/
 	/*  User Variables              */
 	GameSettings settings = "settings.txt";
@@ -75,5 +77,6 @@ private:
 	Sound sndMusic = Sound(L"gameplay.wav", Sound::LoopType::AutoFullSound);
 	Sound sndTitle = Sound(L"mainmenu.wav");
 	SoundEffect sndFart = SoundEffect({ L"punch.wav" });
+	int points = 0;
 	/********************************/
 };
