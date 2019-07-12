@@ -40,9 +40,10 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	
+	ken.Update(ft.Mark());
 }
 
 void Game::ComposeFrame()
 {
+	ken.Draw({ 100, 100 }, gfx);
 }

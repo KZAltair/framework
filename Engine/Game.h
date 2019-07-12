@@ -28,6 +28,7 @@
 #include "SoundEffect.h"
 #include "Surface.h"
 #include "Font.h"
+#include "Animation.h"
 #include <random>
 
 class Game
@@ -48,5 +49,8 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
+	FrameTimer ft;
+	Surface surf = Surface(L"Sprites\\ken.png");
+	Animation ken = Animation(0, 240, 70, 80, 5, surf, 0.15f);
 	/********************************/
 };
